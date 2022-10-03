@@ -4,8 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Home/Home";
 import About from "./components/About/About";
 import Product from "./components/Product/Product";
-import Header from "./components/Header/Header";
+// import Header from "./components/Header/Header";
 import Main from "./layout/Main/Main";
+import PDetails from "./components/PDetais/PDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -16,11 +17,27 @@ function App() {
         { path: "/", element: <Home></Home> },
         { path: "/home", element: <Home></Home> },
         { path: "/about", element: <About></About> },
-        { path: "/product", element: <Product></Product> }
+        {
+          path: "/product",
+          element: <Product></Product>,
+          loader: () => {
+            return fetch("https://jsonplaceholder.typicode.com/users");
+          },
+        },
+
+        {
+          path: "/product/:details",
+          element: <PDetails></PDetails>,
+
+          loader: ({ params }) => {
+            console.log(params.details);
+            return fetch(
+              `https://jsonplaceholder.typicode.com/users/${params.details}`
+            );
+          },
+        },
       ],
     },
-
-
   ]);
 
   return (
